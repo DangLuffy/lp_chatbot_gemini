@@ -1,7 +1,3 @@
-Chào bạn,
-
-Dựa trên cấu trúc tệp mà chúng ta đã xây dựng và hình ảnh bạn cung cấp, đây là bảng tổng hợp và "tích" vào những gì đã hoàn thành:
-
 ### ✅ **Phần Lõi và Cấu trúc (Đã hoàn thành)**
 
 * **[✅] `main.py`**: Đã code xong. Tệp này khởi tạo ứng dụng, kết nối tất cả các router, và khởi chạy server.
