@@ -3,7 +3,8 @@ import logging
 from typing import Dict, Any, Tuple, Optional, Callable, List
 
 from .pulp_cbc_solver import solve_with_pulp_cbc
-from .simplex_manual_solver import solve_with_simplex_manual
+from .simple_dictionary_solver import solve_with_simplex_manual
+from .geometric_solver import solve_with_geometric_method # <<<--- IMPORT BỘ GIẢI MỚI
 # Khi có thêm solver, import chúng ở đây
 # from .another_solver import solve_with_another_method
 
@@ -15,10 +16,11 @@ SolverFunction = Callable[[Dict[str, Any]], Tuple[Optional[Dict[str, Any]], List
 # Hoặc sử dụng functools.partial để bao bọc solver với các tham số mặc định.
 
 # Ánh xạ tên solver sang hàm thực thi
+# Ánh xạ tên solver sang hàm thực thi
 AVAILABLE_SOLVERS: Dict[str, SolverFunction] = {
     "pulp_cbc": solve_with_pulp_cbc,
-    "simplex_manual": lambda pd: solve_with_simplex_manual(pd, max_iterations=50), # Ví dụ dùng lambda để truyền tham số
-    # "another_solver_name": solve_with_another_method,
+    "simplex_manual": lambda pd: solve_with_simplex_manual(pd, max_iterations=50),
+    "geometric": solve_with_geometric_method, # <<<--- THÊM BỘ GIẢI MỚI VÀO DICTIONARY
 }
 
 def dispatch_solver(
