@@ -1,7 +1,7 @@
 # /tests/test_chatbot_nlp.py
 
 import pytest
-from app.chatbot.nlp import extract_lp_from_text
+from app.chatbot.nlp.nlp import extract_lp_from_text
 
 # Sử dụng parametrize để chạy cùng một test với nhiều bộ dữ liệu khác nhau
 @pytest.mark.parametrize("text_input, expected_output", [
