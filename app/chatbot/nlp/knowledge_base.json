@@ -1,0 +1,41 @@
+// app/chatbot/nlp/knowledge_base.json
+{
+    "quy tắc bland": {
+        "term": "Quy tắc Bland (Bland's Rule)",
+        "aliases": [
+            "bland's rule",
+            "bland rule"
+        ],
+        "definition": "Quy tắc Bland là một quy tắc chọn biến vào và biến ra trong thuật toán Đơn hình để đảm bảo tránh hiện tượng xoay vòng (cycling).",
+        "details": "Khi có nhiều lựa chọn cho biến vào (các biến có hệ số cải thiện hàm mục tiêu phù hợp) hoặc biến ra (các biến có cùng tỉ số tối thiểu), Quy tắc Bland ưu tiên chọn biến có chỉ số (index) nhỏ nhất. Chỉ số này thường được xác định bằng cách đánh số thứ tự tất cả các biến trong bài toán.",
+        "purpose": "Đảm bảo thuật toán Đơn hình sẽ kết thúc sau một số hữu hạn bước bằng cách phá vỡ các chu trình có thể xảy ra."
+    },
+    "biến bù": {
+        "term": "Biến Bù (Slack Variable)",
+        "aliases": [
+            "slack variable"
+        ],
+        "definition": "Biến bù là một biến không âm được thêm vào vế trái của một ràng buộc dạng '≤' (nhỏ hơn hoặc bằng) để chuyển nó thành một phương trình dạng '='.",
+        "details": "Ví dụ, ràng buộc $x_1 + x_2 \leq 10$ có thể được viết lại thành $x_1 + x_2 + s_1 = 10$, với $s_1 \geq 0$. Giá trị của biến bù $s_1$ thể hiện phần 'chênh lệch' hay 'phần dư thừa' giữa vế trái và vế phải của bất đẳng thức gốc. Nếu $s_1 = 0$, ràng buộc đó là một ràng buộc biên (binding). Nếu $s_1 > 0$, ràng buộc đó không biên (non-binding).",
+        "purpose": "Giúp chuyển đổi bài toán LP về dạng chính tắc hoặc dạng chuẩn, thuận lợi cho việc áp dụng thuật toán Đơn hình."
+    },
+    "biến thặng dư": {
+        "term": "Biến Thặng Dư (Surplus Variable)",
+        "aliases": [
+            "surplus variable",
+            "biến thừa"
+        ],
+        "definition": "Biến thặng dư là một biến không âm được trừ đi từ vế trái của một ràng buộc dạng '≥' (lớn hơn hoặc bằng) để chuyển nó thành một phương trình dạng '='.",
+        "details": "Ví dụ, ràng buộc $x_1 + x_2 \geq 5$ có thể được viết lại thành $x_1 + x_2 - e_1 = 5$, với $e_1 \geq 0$. Giá trị của biến thặng dư $e_1$ thể hiện lượng mà vế trái vượt quá vế phải. Nếu $e_1 = 0$, ràng buộc đó là ràng buộc biên.",
+        "purpose": "Tương tự biến bù, giúp chuyển đổi bài toán LP về dạng phù hợp cho thuật toán Đơn hình. Thường đi kèm với việc sử dụng biến nhân tạo."
+    },
+    "biến nhân tạo": {
+        "term": "Biến Nhân Tạo (Artificial Variable)",
+        "aliases": [
+            "artificial variable"
+        ],
+        "definition": "Biến nhân tạo là một biến không âm tạm thời được thêm vào các ràng buộc dạng '≥' hoặc '=' trong Quy hoạch Tuyến tính để tạo ra một ma trận đơn vị ban đầu, từ đó có thể bắt đầu thuật toán Đơn hình (thường trong phương pháp Hai Pha hoặc phương pháp Big M).",
+        "details": "Các biến nhân tạo không có ý nghĩa thực tế trong bài toán gốc. Chúng phải bị loại bỏ (có giá trị bằng 0) trong lời giải khả thi cuối cùng của bài toán gốc. Nếu một biến nhân tạo vẫn còn giá trị dương trong lời giải tối ưu của bài toán phụ (ví dụ, Pha 1 của phương pháp Hai Pha), điều đó cho thấy bài toán gốc không có lời giải khả thi.",
+        "purpose": "Tìm một lời giải cơ sở khả thi ban đầu cho thuật toán Đơn hình khi ma trận ràng buộc không tự nhiên chứa một ma trận đơn vị (ví dụ, khi có ràng buộc '≥' hoặc '=')."
+    }
+}

@@ -1,0 +1,20 @@
+[
+    {
+        "id": "production_problem",
+        "name": "Bài toán Sản xuất Bàn Ghế",
+        "story": "Một xưởng mộc sản xuất hai loại sản phẩm: bàn và ghế. Để sản xuất một chiếc bàn, cần 2 giờ ở khâu lắp ráp và 3 đơn vị gỗ. Một chiếc ghế cần 1 giờ lắp ráp và 4 đơn vị gỗ. Xưởng có tối đa 100 giờ công lắp ráp và 180 đơn vị gỗ mỗi tuần. Lợi nhuận cho mỗi chiếc bàn là 40 đồng và mỗi chiếc ghế là 50 đồng. Xưởng nên sản xuất bao nhiêu bàn và ghế để tối đa hóa lợi nhuận?",
+        "full_problem_string": "Maximize P = 40x1 + 50x2 subject to 2x1 + x2 <= 100, 3x1 + 4x2 <= 180, x1 >= 0, x2 >= 0"
+    },
+    {
+        "id": "diet_problem",
+        "name": "Bài toán Lập Khẩu phần Ăn",
+        "story": "Một vận động viên cần bổ sung ít nhất 12mg Vitamin A và 10mg Vitamin C mỗi ngày. Có hai loại thực phẩm bổ sung: loại X và loại Y. Mỗi viên loại X chứa 3mg Vitamin A và 1mg Vitamin C, giá 7 đồng. Mỗi viên loại Y chứa 2mg Vitamin A và 2mg Vitamin C, giá 5 đồng. Vận động viên nên dùng bao nhiêu viên mỗi loại để đáp ứng nhu cầu vitamin với chi phí thấp nhất?",
+        "full_problem_string": "Minimize C = 7x + 5y subject to 3x + 2y >= 12, x + 2y >= 10, x >= 0, y >= 0"
+    },
+    {
+        "id": "transportation_problem",
+        "name": "Bài toán Vận tải (Đơn giản)",
+        "story": "Một công ty cần vận chuyển hàng từ 2 kho hàng (K1, K2) đến một cửa hàng. Kho K1 có 30 sản phẩm, kho K2 có 40 sản phẩm. Cửa hàng cần đúng 50 sản phẩm. Chi phí vận chuyển từ K1 là 5 đồng/sản phẩm và từ K2 là 4 đồng/sản phẩm. Công ty nên vận chuyển bao nhiêu sản phẩm từ mỗi kho để tối thiểu hóa chi phí?",
+        "full_problem_string": "Minimize C = 5x1 + 4x2 subject to x1 + x2 = 50, x1 <= 30, x2 <= 40, x1 >= 0, x2 >= 0"
+    }
+]

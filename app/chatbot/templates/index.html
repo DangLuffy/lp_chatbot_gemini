@@ -4,205 +4,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LP Chatbot</title>
+    <title>LP Chatbot ✨ Trợ lý AI</title>
+
+    <!-- Nhúng font chữ (Nunito) và icon -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+
     <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #f3f4f6;
-            /* Tailwind gray-100 */
-            margin: 0;
             padding: 1rem;
+        }
+
+        h1 {
+            color: #334155;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         #chat-container {
             width: 100%;
             max-width: 600px;
-            background-color: white;
-            border-radius: 0.5rem;
-            /* Tailwind rounded-lg */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            /* Tailwind shadow-md */
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            height: 80vh;
-            /* Chiều cao của container chat */
-            max-height: 700px;
+            height: 85vh;
+            max-height: 750px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         #chat-messages {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 1rem;
-            /* Tailwind p-4 */
-            border-bottom: 1px solid #e5e7eb;
-            /* Tailwind border-gray-200 */
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        #chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
 
         .message {
-            margin-bottom: 0.75rem;
-            /* Tailwind mb-3 */
-            padding: 0.5rem 0.75rem;
-            /* Tailwind p-2 px-3 */
-            border-radius: 0.375rem;
-            /* Tailwind rounded-md */
-            max-width: 80%;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            max-width: 85%;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .avatar i {
+            font-size: 18px;
+            color: #475569;
+        }
+
+        .text-content {
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            line-height: 1.5;
             word-wrap: break-word;
         }
 
         .user-message {
-            background-color: #3b82f6;
-            /* Tailwind bg-blue-500 */
-            color: white;
             align-self: flex-end;
-            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .user-message .text-content {
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        .user-message .avatar {
+            background-color: #bfdbfe;
+        }
+
+        .user-message .avatar i {
+            color: #1e40af;
         }
 
         .bot-message {
-            background-color: #e5e7eb;
-            /* Tailwind bg-gray-200 */
-            color: #1f2937;
-            /* Tailwind text-gray-800 */
             align-self: flex-start;
-            margin-right: auto;
-            white-space: pre-wrap;
-            /* Để giữ các dấu xuống dòng từ bot */
         }
+
+        .bot-message .text-content {
+            background-color: #ffffff;
+            color: #334155;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Định dạng đậm và các thẻ khác trong tin nhắn bot */
+        .bot-message .text-content b,
+        .bot-message .text-content strong {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .bot-message .text-content ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .bot-message .text-content li {
+            margin-bottom: 0.25rem;
+        }
+
 
         #chat-form {
             display: flex;
             padding: 1rem;
-            /* Tailwind p-4 */
+            gap: 0.5rem;
+            border-top: 1px solid #e5e7eb;
         }
 
         #message-input {
             flex-grow: 1;
             border: 1px solid #d1d5db;
-            /* Tailwind border-gray-300 */
-            padding: 0.5rem 0.75rem;
-            /* Tailwind p-2 px-3 */
-            border-radius: 0.375rem;
-            /* Tailwind rounded-md */
-            margin-right: 0.5rem;
-            /* Tailwind mr-2 */
+            padding: 0.75rem 1rem;
+            border-radius: 9999px;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        #message-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background-color: white;
         }
 
         #send-button {
-            background-color: #10b981;
-            /* Tailwind bg-emerald-500 */
+            background-color: #3b82f6;
             color: white;
-            padding: 0.5rem 1rem;
-            /* Tailwind p-2 px-4 */
+            width: 48px;
+            height: 48px;
             border: none;
-            border-radius: 0.375rem;
-            /* Tailwind rounded-md */
+            border-radius: 50%;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         #send-button:hover {
-            background-color: #059669;
-            /* Tailwind bg-emerald-600 */
+            background-color: #2563eb;
+            transform: scale(1.05);
         }
 
-        h1 {
-            color: #111827;
-            /* Tailwind text-gray-900 */
-            margin-bottom: 1.5rem;
-            /* Tailwind mb-6 */
+        #send-button i {
+            font-size: 24px;
+        }
+
+        .suggestion-button {
+            background-color: #ffffff;
+            color: #3b82f6;
+            border: 1px solid #dbeafe;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            animation: popIn 0.3s ease-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .suggestion-button:hover {
+            background-color: #eff6ff;
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+        }
+
+        #suggestion-area {
+            padding: 0 1.5rem 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
     </style>
 </head>
 
 <body>
-    <h1 class="text-3xl font-bold text-center">Chatbot Giải Quy Hoạch Tuyến Tính</h1>
+    <h1 class="text-3xl font-bold text-center mb-4">
+        <i class="ph-sparkle-fill text-yellow-400"></i>
+        <span>Chatbot Quy Hoạch Tuyến Tính</span>
+        <i class="ph-sparkle-fill text-yellow-400"></i>
+    </h1>
+
     <div id="chat-container">
-        <div id="chat-messages">
-            <div class="message bot-message">
-                Xin chào! Hãy nhập bài toán quy hoạch tuyến tính của bạn. Ví dụ: "Maximize 3x1 + 2x2 subject to x1+x2
-                <=10" </div>
-            </div>
-            <form id="chat-form">
-                <input type="text" id="message-input" placeholder="Nhập bài toán của bạn..." autocomplete="off">
-                <button type="submit" id="send-button">Gửi</button>
-            </form>
-        </div>
+        <div id="chat-messages"></div>
+        <div id="suggestion-area"></div>
+        <form id="chat-form">
+            <input type="text" id="message-input" placeholder="Nhập bài toán hoặc câu hỏi..." autocomplete="off">
+            <button type="submit" id="send-button" aria-label="Gửi">
+                <i class="ph-paper-plane-tilt-fill"></i>
+            </button>
+        </form>
+    </div>
 
-        <script>
-            const chatMessages = document.getElementById('chat-messages');
-            const chatForm = document.getElementById('chat-form');
-            const messageInput = document.getElementById('message-input');
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const suggestionArea = document.getElementById('suggestion-area');
 
-            chatForm.addEventListener('submit', async function (event) {
-                event.preventDefault(); // Ngăn form submit theo cách truyền thống
+        let lastProblemContext = null;
 
-                const userMessageText = messageInput.value.trim();
-                if (!userMessageText) return;
-
-                appendMessage(userMessageText, 'user');
-                messageInput.value = ''; // Xóa input sau khi gửi
-
-                // Hiển thị "Bot đang soạn..." (tùy chọn)
-                const typingIndicator = appendMessage('Bot đang soạn...', 'bot', true);
-
-                try {
-                    const formData = new FormData();
-                    formData.append('message', userMessageText);
-
-                    // Gửi tin nhắn đến backend
-                    // URL này cần khớp với prefix và endpoint trong web_routes.py
-                    // Ví dụ, nếu web_routes.py được include với prefix "/chatbotui" trong main.py
-                    // thì URL sẽ là "/chatbotui/send_message"
-                    const response = await fetch('/send_message', { // Điều chỉnh URL này nếu cần
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    // Xóa chỉ báo "Bot đang soạn..."
-                    if (typingIndicator) {
-                        chatMessages.removeChild(typingIndicator);
-                    }
-
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({ detail: "Lỗi không xác định từ server." }));
-                        const errorMsg = errorData.detail || `Lỗi: ${response.status} ${response.statusText}`;
-                        appendMessage(`Lỗi: ${errorMsg}`, 'bot');
-                        console.error('Error sending message:', errorMsg, errorData);
-                        return;
-                    }
-
-                    const data = await response.json();
-                    appendMessage(data.bot_response, 'bot');
-
-                } catch (error) {
-                    if (typingIndicator) {
-                        chatMessages.removeChild(typingIndicator);
-                    }
-                    appendMessage('Lỗi kết nối tới server. Vui lòng thử lại.', 'bot');
-                    console.error('Network error:', error);
-                }
-            });
-
-            function appendMessage(text, sender, isTyping = false) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message');
-                if (sender === 'user') {
-                    messageDiv.classList.add('user-message');
-                } else {
-                    messageDiv.classList.add('bot-message');
-                }
-                messageDiv.textContent = text;
-                chatMessages.appendChild(messageDiv);
-
-                // Cuộn xuống tin nhắn mới nhất
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                return isTyping ? messageDiv : null;
+        messageInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                chatForm.dispatchEvent(new Event('submit', { cancelable: true }));
             }
-        </script>
+        });
+
+        chatForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const userMessageText = messageInput.value.trim();
+            if (!userMessageText) return;
+            clearSuggestions();
+            sendMessageToServer(userMessageText);
+            messageInput.value = '';
+        });
+
+        async function sendMessageToServer(messageText) {
+            appendMessage(messageText, 'user');
+            const typingIndicator = appendMessage('...', 'bot', true);
+
+            try {
+                const formData = new FormData();
+                formData.append('message', messageText);
+                if (lastProblemContext) {
+                    formData.append('context', JSON.stringify(lastProblemContext));
+                }
+
+                const response = await fetch('/send_message', { method: 'POST', body: formData });
+                if (typingIndicator) typingIndicator.remove();
+                if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
+
+                const data = await response.json();
+
+                if (data && data.bot_response) {
+                    appendMessage(data.bot_response.text_response, 'bot', false, data.bot_response.allow_html);
+                    if (data.bot_response.problem_context) {
+                        lastProblemContext = data.bot_response.problem_context;
+                    } else {
+                        // Reset context nếu server không trả về context mới (vd: khi bắt đầu lại)
+                        if (messageText.toLowerCase().includes("bài toán mới")) {
+                            lastProblemContext = null;
+                        }
+                    }
+                    if (data.bot_response.suggestions && data.bot_response.suggestions.length > 0) {
+                        displaySuggestions(data.bot_response.suggestions);
+                    }
+                } else {
+                    throw new Error("Invalid response structure from server.");
+                }
+
+            } catch (error) {
+                if (typingIndicator) typingIndicator.remove();
+                appendMessage('Ôi, không thể kết nối tới server. Bạn vui lòng thử lại nhé.', 'bot');
+                console.error('Network error:', error);
+            }
+        }
+
+        function appendMessage(content, sender, isTyping = false, allowHTML = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+
+            const avatarDiv = document.createElement('div');
+            avatarDiv.classList.add('avatar');
+            avatarDiv.innerHTML = `<i class="${sender === 'bot' ? 'ph-robot' : 'ph-user'}"></i>`;
+
+            const textDiv = document.createElement('div');
+            textDiv.classList.add('text-content');
+
+            if (isTyping) {
+                textDiv.innerHTML = '<div class="flex items-center gap-1"><span class="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: -0.3s;"></span><span class="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: -0.15s;"></span><span class="h-2 w-2 bg-gray-400 rounded-full animate-bounce"></span></div>';
+            } else {
+                if (allowHTML) {
+                    textDiv.innerHTML = content.replace(/\n/g, '<br>');
+                } else {
+                    textDiv.textContent = content;
+                }
+            }
+
+            messageDiv.append(sender === 'user' ? textDiv : avatarDiv, sender === 'user' ? avatarDiv : textDiv);
+            chatMessages.appendChild(messageDiv);
+
+            chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+            return messageDiv;
+        }
+
+        function displaySuggestions(suggestions) {
+            clearSuggestions();
+            suggestions.forEach(suggestion => {
+                const button = document.createElement('button');
+                button.classList.add('suggestion-button');
+                button.innerHTML = suggestion.includes("✨")
+                    ? `<i class="ph-sparkle-fill text-yellow-500"></i> ${suggestion.replace("✨", "").trim()}`
+                    : suggestion;
+                button.addEventListener('click', () => {
+                    const plainText = suggestion;
+                    clearSuggestions();
+                    sendMessageToServer(plainText);
+                });
+                suggestionArea.appendChild(button);
+            });
+        }
+
+        function clearSuggestions() {
+            suggestionArea.innerHTML = '';
+        }
+
+        window.addEventListener('load', () => {
+            appendMessage('Xin chào! Tớ là Trợ lý AI cho Quy hoạch Tuyến tính. Bạn cần tớ giúp gì nào?', 'bot');
+            displaySuggestions(['Giải bài toán mẫu', '✨ Kể một câu chuyện bài toán', 'Biến bù là gì?']);
+        });
+
+    </script>
 </body>
 
 </html>

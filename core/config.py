@@ -3,7 +3,7 @@
 import os
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Optional # Thêm Optional
 
 # Tải các biến môi trường từ tệp .env (nếu có)
 # Điều này hữu ích cho việc quản lý các cấu hình nhạy cảm trong môi trường development.
@@ -31,6 +31,13 @@ class Settings(BaseSettings):
     LOG_FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     LOG_DATE_FORMAT: str = "%Y-%m-%d %H:%M:%S"
 
+    # Thêm GOOGLE_API_KEY
+    # Nó sẽ tự động đọc từ biến môi trường GOOGLE_API_KEY.
+    # Optional[str] = None nghĩa là nếu biến môi trường không được đặt, giá trị sẽ là None.
+    # Nếu bạn muốn yêu cầu bắt buộc phải có key, hãy dùng: GOOGLE_API_KEY: str
+    # Tuy nhiên, NlpGptParser đã có logic xử lý trường hợp key không có.
+    GOOGLE_API_KEY: Optional[str] = None
+
     # Ví dụ về các cấu hình khác có thể cần
     # DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL")
     # NLP_MODEL_PATH: str = os.getenv("NLP_MODEL_PATH", "models/nlp_model.pkl")
@@ -42,6 +49,10 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         # Cho phép Pydantic phân biệt chữ hoa/thường cho tên biến môi trường
         case_sensitive = True
+        # Bỏ dòng extra = 'ignore' hoặc 'allow' nếu có,
+        # vì mặc định của Pydantic V2 là 'forbid' và chúng ta đã thêm trường.
+        # Nếu bạn muốn cho phép các trường thừa khác mà không báo lỗi, dùng 'ignore'.
+        # extra = 'ignore' # Hoặc 'allow'
 
 # Tạo một instance của Settings để sử dụng trong toàn bộ ứng dụng
 settings = Settings()
@@ -53,3 +64,4 @@ if __name__ == "__main__":
     print(f"Server Host: {settings.SERVER_HOST}")
     print(f"Server Port: {settings.SERVER_PORT}")
     print(f"Log Level: {settings.LOG_LEVEL}")
+    print(f"Google API Key (loaded): {settings.GOOGLE_API_KEY}") # In ra để kiểm tra

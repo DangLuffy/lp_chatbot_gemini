@@ -1,1 +1,13 @@
-pip install pytest httpx
+# FastAPI and Web Server
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic-settings
+
+# LP Solvers and Scientific Computing
+pulp
+numpy
+matplotlib
+
+# Google Gemini AI
+google-generativeai
