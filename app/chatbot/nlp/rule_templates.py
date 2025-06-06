@@ -23,8 +23,24 @@ LP_PATTERNS["single_constraint_line"] = re.compile(
 )
 
 # Từ khóa và mẫu cho Intent Recognition
+# Từ khóa và mẫu cho Intent Recognition
 INTENT_PATTERNS = {
     "greet": [re.compile(r"^\s*(xin chào|chào bạn|hello|hi|chào)\s*$", re.IGNORECASE)],
+    
+    # --- ✨ Cải tiến: Tách biệt và ưu tiên các intent cụ thể ---
+    "request_step_explanation": [
+        re.compile(r".*(giải thích|phân tích|hiển thị)\s+(từng\s+)?(bước|vòng lặp|iteration|log|cách giải)\s*(\d*).*", re.IGNORECASE)
+    ],
+    
+    # --- ✨ Cải tiến: Regex cụ thể hơn cho từng loại solver ---
+    "request_specific_solver": [
+        re.compile(r".*(dùng|giải bằng|sử dụng|thử).*(từ điển đơn hình|đơn hình|simplex|simple dictionary).*", re.IGNORECASE),
+        re.compile(r".*(dùng|giải bằng|sử dụng|thử).*(bland).*", re.IGNORECASE),
+        re.compile(r".*(dùng|giải bằng|sử dụng|thử).*(hình học|geometric).*", re.IGNORECASE),
+        re.compile(r".*(dùng|giải bằng|sử dụng|thử).*(pulp|cbc).*", re.IGNORECASE),
+        re.compile(r".*(dùng|giải bằng|sử dụng|thử).*(auxiliary).*", re.IGNORECASE),
+    ],
+    
     "define_objective": [re.compile(r"^(tối đa hóa|tối thiểu hóa|maximize|minimize|max|min)\s+.*", re.IGNORECASE)],
     "add_constraint": [
         re.compile(r"^(ràng buộc|điều kiện|dk|rb|constraint).*", re.IGNORECASE),
@@ -35,15 +51,6 @@ INTENT_PATTERNS = {
         re.compile(r".*(là gì|nghĩa là gì|define|what is)\s*$", re.IGNORECASE),
         re.compile(r"^(cho tôi biết về|nói về|explain)\s+([a-zA-Z0-9\s_À-ỹ]+)$", re.IGNORECASE)
     ],
-    "request_specific_solver": [
-        re.compile(r".*(giải bằng|dùng|sử dụng|thử)\s+(phương pháp\s+)?(hình học|đơn hình|simplex|pulp|geometric|bland|auxiliary).*", re.IGNORECASE)
-    ],
-    
-    # --- ✨ INTENT MỚI ĐỂ GIẢI THÍCH BƯỚC GIẢI ---
-    "request_step_explanation": [
-        re.compile(r".*(giải thích|phân tích)\s+(bước|vòng lặp|iteration)\s+(\d+).*", re.IGNORECASE)
-    ],
-
     "reset_conversation": [re.compile(r"^(reset|bắt đầu lại|làm mới|clear|bài toán mới)\s*$", re.IGNORECASE)],
 }
 
@@ -54,7 +61,12 @@ ENTITY_PATTERNS = {
     "concept_name_lp": r"(quy tắc Bland|biến nhân tạo|simplex|đơn hình đối ngẫu)"
 }
 
-# ... các hằng số khác giữ nguyên
+# Mẫu để trích xuất các thực thể cơ bản
+ENTITY_PATTERNS = {
+    "solver_name": r"(pulp_cbc|geometric|simple_dictionary|simplex_bland|auxiliary|hình học|đơn hình|pulp|bland)",
+    "concept_name_lp": r"(quy tắc Bland|biến nhân tạo|simplex|đơn hình đối ngẫu)"
+}
+
 OBJECTIVE_TYPE_KEYWORDS = {
     "maximize": [r"tối đa hóa", r"maximize", r"max"],
     "minimize": [r"tối thiểu hóa", r"minimize", r"min"]
